@@ -21,7 +21,7 @@ class UDPReceiver implements Receiver {
 		try {
 			prepare();
 		} catch (SocketException socketException) {
-			throw new ChatException("Houve algum erro ao iniciar o receiver.", socketException);
+			throw new ChatException("There was some errors starting your receiver.", socketException);
 		}
 		new Thread(this).start();
 	}
@@ -33,21 +33,20 @@ class UDPReceiver implements Receiver {
 				try {
 					receive();
 				} catch (IOException ioException) {
-					container.newMessage("Houve algum erro ao receber mensagens.");
+					container.newMessage("There was some errors when receiving messages.");
 				}
 			}
 		}
 	}
 
 	private void validateAttributes(int portNumber, int bufferSize, MessageContainer container) {
-
 		if (portNumber <= MIN_PORT_NUMBER)
-			throw new IllegalArgumentException("O receiver n ̃ao pode usar portas reservadas.");
+			throw new IllegalArgumentException("The Receiver can't use reserved ports.");
 		if (container == null)
-			throw new IllegalArgumentException("O container de mensagens n ̃ao pode ser nulo.");
+			throw new IllegalArgumentException("The message container can't be null.");
 		if (bufferSize < MIN_BUFFER_SIZE)
 			throw new IllegalArgumentException(
-					String.format("O tamanho do buffer precisa ser maior que %d", MIN_BUFFER_SIZE));
+					String.format("The buffers size needs to be greater than %d", MIN_BUFFER_SIZE));
 	}
 
 	private void asignAttributes(int portNumber, int bufferSize, MessageContainer container) {

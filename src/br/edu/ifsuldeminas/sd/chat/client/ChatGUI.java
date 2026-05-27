@@ -2,7 +2,9 @@ package br.edu.ifsuldeminas.sd.chat.client;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,30 +19,36 @@ import br.edu.ifsuldeminas.sd.chat.Sender;
 
 public class ChatGUI extends JFrame implements MessageContainer {
 
-    private JTextField txtPortaLocal, txtIpRemoto, txtPortaRemota, txtMensagem;
+    private static final long serialVersionUID = 1L;
+	private JTextField txtPortaLocal, txtIpRemoto, txtPortaRemota, txtMensagem;
+    private JCheckBox chkTcp;
     private JTextArea areaChat;
     private JButton btnEnviar, btnConectar;
     private Sender sender;
 
     public ChatGUI() {
-        setTitle("Chat UDP");
-        setSize(400, 450);
+        setTitle("Chat UDP/TCP");
+        setSize(400, 480);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(5, 5));
 
-        JPanel painelConfig = new JPanel(new GridLayout(4, 2, 5, 5));
+        JPanel painelConfig = new JPanel(new GridLayout(5, 2, 5, 5));
         
         painelConfig.add(new JLabel(" Porta Local:"));
         txtPortaLocal = new JTextField("1025");
         painelConfig.add(txtPortaLocal);
         
         painelConfig.add(new JLabel(" IP Remoto:"));
-        txtIpRemoto = new JTextField("127.0.0.1");
+        txtIpRemoto = new JTextField("");
         painelConfig.add(txtIpRemoto);
         
         painelConfig.add(new JLabel(" Porta Remota:"));
         txtPortaRemota = new JTextField("1026");
         painelConfig.add(txtPortaRemota);
+        
+        painelConfig.add(new JLabel(" Protocolo:"));
+        chkTcp = new JCheckBox("Usar TCP");
+        painelConfig.add(chkTcp);
         
         painelConfig.add(new JLabel(""));
         btnConectar = new JButton("Conectar");
@@ -72,11 +80,15 @@ public class ChatGUI extends JFrame implements MessageContainer {
             int pLocal = Integer.parseInt(txtPortaLocal.getText());
             int pRemota = Integer.parseInt(txtPortaRemota.getText());
             String ip = txtIpRemoto.getText();
+            boolean usarTcp = chkTcp.isSelected();
 
-            sender = ChatFactory.build(ip, pRemota, pLocal, this);
+            sender = ChatFactory.build(usarTcp, ip, pRemota, pLocal, this);
             
-            areaChat.append("Conectado na porta " + pLocal + "\n");
+            String protocolo = usarTcp ? "TCP" : "UDP";
+            areaChat.append("Conectado na porta " + pLocal + " via " + protocolo + "\n");
+            
             btnConectar.setEnabled(false);
+            chkTcp.setEnabled(false);
             btnEnviar.setEnabled(true);
             txtMensagem.requestFocus();
         } catch (Exception ex) {

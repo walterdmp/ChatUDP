@@ -18,7 +18,7 @@ class UDPSender implements Sender {
 		try {
 			this.senderSocket = new DatagramSocket();
 		} catch (SocketException socketException) {
-			throw new ChatException("Houve algum erro ao iniciar o sender.", socketException);
+			throw new ChatException("There was some errors starting your sender.", socketException);
 		}
 	}
 
@@ -29,14 +29,14 @@ class UDPSender implements Sender {
 		try {
 			senderSocket.send(datagramPacketToSend);
 		} catch (IOException ioException) {
-			throw new ChatException(String.format("Sua mensagem ’%s’ n ̃ao foi enviada.", message), ioException);
+			throw new ChatException(String.format("Your message '%s' can't be sent.", message), ioException);
 		}
 	}
 
 	private void validateAttributes(InetAddress receiver, int receiverPort) {
 		if (receiver == null)
-			throw new IllegalArgumentException("O receiver n ̃ao pode ser nulo.");
+			throw new IllegalArgumentException("Receiver can't be null.");
 		if (receiverPort <= 0)
-			throw new IllegalArgumentException(String.format("Porta inv ́alida para o receiver."));
+			throw new IllegalArgumentException(String.format("Invalid port number for receiver."));
 	}
 }
